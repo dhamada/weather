@@ -33,7 +33,7 @@ export default class App extends Component {
               <td>{element.rainyPercent}%</td>
               <td>
                 <span
-                  class={element.status === '中止'
+                  className={element.status === '中止'
                   ? 'tag is-danger is-medium'
                   : 'tag is-primary is-medium'}>
                   {element.status}
@@ -51,19 +51,21 @@ export default class App extends Component {
           <h1 className="App-title">東京都</h1>
         </header>
 
-        <div class="parent">
-          <div class="inner">
-            <div class="tablecell">
-              <div class="box">
-                <div class="media-content">
-                  <div clas="content">
-                    <table class="table">
+        <div className="parent">
+          <div className="inner">
+            <div className="tablecell">
+              <div className="box">
+                <div className="media-content">
+                  <div className="content">
+                    <table className="table">
                       <thead>
-                        <th>日時</th>
-                        <th>最高気温</th>
-                        <th>最低気温</th>
-                        <th>降水確率</th>
-                        <th>ステータス</th>
+                        <tr>
+                          <th>日時</th>
+                          <th>最高気温</th>
+                          <th>最低気温</th>
+                          <th>降水確率</th>
+                          <th>ステータス</th>
+                        </tr>
                       </thead>
                       <tbody>
                         {tableBody}
