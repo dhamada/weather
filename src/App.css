@@ -50,3 +50,22 @@
   height: 100%;
   margin: 20px;
 }
+
+.fcst_wxicon {
+  width: 38px;
+  height: 28px;
+}
+
+@media (min-width: 492px) {
+  .fcst_wxicon {
+    width: 76px;
+    height: 56px;
+  }
+}
+
+@media (min-width: 374px) {
+  .fcst_wxicon {
+    width: 50px;
+    height: 37px;
+  }
+}

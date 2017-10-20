@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import * as api from './api';
 import * as util from './util';
+import * as constants from './constants';
+import NavBar from './NavBar';
+import Tab from './Tab'
+import WeatherTable from './WeatherTable';
 import logo from './logo.svg';
 import 'bulma/css/bulma.css';
 import './App.css';
@@ -10,46 +14,64 @@ export default class App extends Component {
     super(props);
 
     this.state = {
-      weatherReports: []
+      regions: {
+        kanto: [
+          constants.TOKYO,
+          constants.KANAGAWA,
+          constants.SAITAMA,
+          constants.CHIBA,
+          constants.IBARAKI,
+          constants.TOCHIGI,
+          constants.GUNMA,
+          constants.YAMANASHI,
+          constants.NAGANO
+        ],
+        kansai: [
+          constants.OSAKA,
+          constants.KYOTO,
+          constants.HYOGO,
+          constants.NARA,
+          constants.WAKAYAMA,
+          constants.SHIGA
+        ]
+      },
+      weatherReports: [],
+      currentArea: constants.KANTO,
+      currentRegion: constants.TOKYO
     }
+
+    this.handleNavBarOnClick = this
+      .handleNavBarOnClick
+      .bind(this);
+    this.handleTabOnClick = this
+      .handleTabOnClick
+      .bind(this);
+    this.process = this
+      .process
+      .bind(this);
   }
 
   componentWillMount() {
-    this.process();
+    this.process(this.state.currentRegion);
   }
 
   render() {
-    let tableBody = [];
-    if (this.state.weatherReports) {
-      this
-        .state
-        .weatherReports
-        .forEach((element, i) => {
-          tableBody.push(
-            <tr key={i}>
-              <td>{element.date}</td>
-              <td>{element.highest}℃</td>
-              <td>{element.lowest}℃</td>
-              <td>{element.rainyPercent}%</td>
-              <td>
-                <span
-                  className={element.status === '中止'
-                  ? 'tag is-danger is-medium'
-                  : 'tag is-primary is-medium'}>
-                  {element.status}
-                </span>
-              </td>
-            </tr>
-          )
-        })
-    }
 
     return (
       <div className="App">
+        <NavBar onClick={this.handleNavBarOnClick}/>
+
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo"/>
-          <h1 className="App-title">東京都</h1>
+          <h1 className="App-title">{this.state.currentRegion}</h1>
         </header>
+
+        <Tab
+          onClick={this.handleTabOnClick}
+          area={this.state.currentArea}
+          regions={this.state.currentArea === constants.KANTO
+          ? this.state.regions.kanto
+          : this.state.regions.kansai}/>
 
         <div className="parent">
           <div className="inner">
@@ -57,20 +79,7 @@ export default class App extends Component {
               <div className="box">
                 <div className="media-content">
                   <div className="content">
-                    <table className="table">
-                      <thead>
-                        <tr>
-                          <th>日時</th>
-                          <th>最高気温</th>
-                          <th>最低気温</th>
-                          <th>降水確率</th>
-                          <th>ステータス</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {tableBody}
-                      </tbody>
-                    </table>
+                    <WeatherTable weatherReports={this.state.weatherReports}/>
                   </div>
                 </div>
               </div>
@@ -81,11 +90,28 @@ export default class App extends Component {
     );
   }
 
-  async process() {
-    const response = await api.getWeatherReport();
+  handleNavBarOnClick(area) {
+    this.setState({
+      currentArea: area,
+      currentRegion: area === constants.KANTO
+        ? constants.TOKYO
+        : constants.OSAKA
+    });
+
+    this.process(this.state.currentRegion);
+  }
+
+  handleTabOnClick(region) {
+    this
+      .process(region)
+      .then(() => this.setState({currentRegion: region}));
+  }
+
+  async process(region) {
+    const url = util.getRegionUrl(region);
+    const response = await api.getWeatherReport(url);
     const weatherReports = await util.parseWeatherNews(response.data);
 
     this.setState({weatherReports})
-    this.forceUpdate()
   }
 }
