@@ -80,6 +80,7 @@ export default class App extends Component {
       </div>
     );
   }
+
   async process() {
     const response = await api.getWeatherReport();
     const weatherReports = await util.parseWeatherNews(response.data);
