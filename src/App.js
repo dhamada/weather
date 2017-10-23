@@ -64,6 +64,15 @@ export default class App extends Component {
     this.getWeatherForecast(currentRegion);
   }
 
+  componentDidMount() {
+    const {currentRegion} = this.state
+    // １時間毎に自動更新
+    setInterval(1 * 1000 * 60 * 60, function () {
+      this.getTodaysWeatherForecast(currentRegion);
+      this.getWeatherForecast(currentRegion);
+    })
+  }
+
   render() {
 
     return (
