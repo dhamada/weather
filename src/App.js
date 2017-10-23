@@ -7,6 +7,8 @@ import Tab from './Tab'
 import WeatherTable from './WeatherTable';
 import logo from './logo.svg';
 import 'bulma/css/bulma.css';
+import 'mdi/css/materialdesignicons.min.css';
+import 'mdi/css/materialdesignicons.min.css.map';
 import './App.css';
 
 export default class App extends Component {
@@ -35,7 +37,7 @@ export default class App extends Component {
           constants.SHIGA
         ]
       },
-      weatherReports: [],
+      weatherForecast: [],
       currentArea: constants.KANTO,
       currentRegion: constants.TOKYO
     }
@@ -46,13 +48,18 @@ export default class App extends Component {
     this.handleTabOnClick = this
       .handleTabOnClick
       .bind(this);
-    this.process = this
-      .process
+    this.getTodaysWeatherForecast = this
+      .getTodaysWeatherForecast
+      .bind(this);
+    this.getWeatherForecast = this
+      .getWeatherForecast
       .bind(this);
   }
 
   componentWillMount() {
-    this.process(this.state.currentRegion);
+    const {currentRegion} = this.state;
+    // this.getTodaysWeatherForecast(currentRegion);
+    this.getWeatherForecast(currentRegion);
   }
 
   render() {
@@ -79,7 +86,7 @@ export default class App extends Component {
               <div className="box">
                 <div className="media-content">
                   <div className="content">
-                    <WeatherTable weatherReports={this.state.weatherReports}/>
+                    <WeatherTable weatherForecast={this.state.weatherForecast}/>
                   </div>
                 </div>
               </div>
@@ -98,20 +105,26 @@ export default class App extends Component {
         : constants.OSAKA
     });
 
-    this.process(this.state.currentRegion);
+    this.getWeatherForecast(this.state.currentRegion);
   }
 
   handleTabOnClick(region) {
     this
-      .process(region)
+      .getWeatherForecast(region)
       .then(() => this.setState({currentRegion: region}));
   }
 
-  async process(region) {
+  async getTodaysWeatherForecast(region) {
     const url = util.getRegionUrl(region);
-    const response = await api.getWeatherReport(url);
-    const weatherReports = await util.parseWeatherNews(response.data);
+    const response = await api.getJapanMetrogicalAgency(url.tenki);
+    const forecast = await util.parseJPM(response.data);
+  }
 
-    this.setState({weatherReports})
+  async getWeatherForecast(region) {
+    const url = util.getRegionUrl(region);
+    const response = await api.getWeatherNews(url.weathernews);
+    const weatherForecast = await util.parseWeatherNews(response.data);
+
+    this.setState({weatherForecast})
   }
 }

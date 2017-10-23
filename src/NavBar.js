@@ -4,17 +4,26 @@ import * as constans from './constants';
 
 const NavBar = (props) => {
     return (
-        <nav className="navbar" role="navigation" aria-label="main navigation">
+        <nav className="navbar is-light" aria-label="main navigation">
             <div className="navbar-brand">
-                <a className="navbar-item" href="">
-                    <span className="icon is-small">
-                        <i className="fa fa-home"></i>
+                <a className="navbar-info" href="">
+                    <span className="icon is-large">
+                        <i className="mdi mdi-weather-partlycloudy"></i>
                     </span>
                     <span>Weather</span>
                 </a>
+            </div>
+            <div className="navbar-menu">
+                <div className="navbar-start">
+                    <a className="navbar-item" onClick={() => props.onClick(constans.KANTO)}>
+                        関東
+                    </a>
+                    <a className="navbar-item" onClick={() => props.onClick(constans.KANSAI)}>
+                        関西
+                    </a>
+                </div>
 
-                <a className="navbar-item" onClick={() => props.onClick(constans.KANTO)}>関東</a>
-                <a className="navbar-item" onClick={() => props.onClick(constans.KANSAI)}>関西</a>
+                <div className="navbar-end"></div>
             </div>
         </nav>
     )

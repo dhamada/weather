@@ -3,9 +3,9 @@ import propTypes from 'prop-types';
 
 const WeatherTable = (props) => {
     let tableBody = [];
-    if (props.weatherReports) {
+    if (props.weatherForecast) {
         props
-            .weatherReports
+            .weatherForecast
             .forEach((element, i) => {
                 tableBody.push(
                     <tr key={i}>
@@ -13,6 +13,7 @@ const WeatherTable = (props) => {
                         <td>
                             <img
                                 className="fcst_wxicon"
+                                alt=""
                                 src={element.img
                                 ? element.img
                                 : ""}/>
@@ -49,7 +50,7 @@ const WeatherTable = (props) => {
 }
 
 WeatherTable.propType = {
-    weatherReports: propTypes.array.required
+    weatherForecast: propTypes.array.required
 }
 
 export default WeatherTable;

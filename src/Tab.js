@@ -53,6 +53,10 @@ class Tab extends React.Component {
     }
 
     handleOnClick(tab) {
+        this
+            .props
+            .onClick(tab.region);
+
         const index = this
             .state
             .tabData
@@ -69,10 +73,6 @@ class Tab extends React.Component {
             }
             return element
         });
-
-        this
-            .props
-            .onClick(tab.region);
 
         this.setState({tabData})
     }

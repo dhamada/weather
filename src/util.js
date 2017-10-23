@@ -2,11 +2,22 @@ import cheerio from 'cheerio';
 import * as constans from './constants';
 import {url} from './settings';
 
+export const parseJPM = async(html) => {
+    const $ = cheerio.load(html);
+    const forecastTable = $('table.forecast');
+    const tbody = forecastTable.find('tbody');
+    const rows = tbody.find('tr');
+
+    rows.forEach(function (element, i) {
+        console.log(element);
+    }, this);
+}
+
 export const parseWeatherNews = async(html) => {
     const $ = cheerio.load(html);
-    const weatherTable = $('table.fcst-table-weekly');
-    const cells = weatherTable.find('tbody');
-    const rows = cells.find('tr');
+    const forecastTable = $('table.fcst-table-weekly');
+    const tbody = forecastTable.find('tbody');
+    const rows = tbody.find('tr');
 
     const weatherReports = [];
     rows.each(function (i, tr) {
