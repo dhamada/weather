@@ -4,6 +4,7 @@ import * as util from './util';
 import * as constants from './constants';
 import NavBar from './NavBar';
 import Tab from './Tab'
+import TodaysForecast from './TodysForecast';
 import WeatherTable from './WeatherTable';
 import logo from './logo.svg';
 import 'bulma/css/bulma.css';
@@ -37,6 +38,7 @@ export default class App extends Component {
           constants.SHIGA
         ]
       },
+      todaysForecast: [],
       weatherForecast: [],
       currentArea: constants.KANTO,
       currentRegion: constants.TOKYO
@@ -58,7 +60,7 @@ export default class App extends Component {
 
   componentWillMount() {
     const {currentRegion} = this.state;
-    // this.getTodaysWeatherForecast(currentRegion);
+    this.getTodaysWeatherForecast(currentRegion);
     this.getWeatherForecast(currentRegion);
   }
 
@@ -80,35 +82,27 @@ export default class App extends Component {
           ? this.state.regions.kanto
           : this.state.regions.kansai}/>
 
-        <div className="parent">
-          <div className="inner">
-            <div className="tablecell">
-              <div className="box">
-                <div className="media-content">
-                  <div className="content">
-                    <WeatherTable weatherForecast={this.state.weatherForecast}/>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="flex">
+          <TodaysForecast data={this.state.todaysForecast}/>
+          <WeatherTable weatherForecast={this.state.weatherForecast}/>
         </div>
+
       </div>
     );
   }
 
   handleNavBarOnClick(area) {
-    this.setState({
-      currentArea: area,
-      currentRegion: area === constants.KANTO
-        ? constants.TOKYO
-        : constants.OSAKA
-    });
+    const currentRegion = area === constants.KANTO
+      ? constants.TOKYO
+      : constants.OSAKA;
+    this.setState({currentArea: area, currentRegion});
 
-    this.getWeatherForecast(this.state.currentRegion);
+    this.getTodaysWeatherForecast(currentRegion)
+    this.getWeatherForecast(currentRegion);
   }
 
   handleTabOnClick(region) {
+    this.getTodaysWeatherForecast(region)
     this
       .getWeatherForecast(region)
       .then(() => this.setState({currentRegion: region}));
@@ -116,8 +110,8 @@ export default class App extends Component {
 
   async getTodaysWeatherForecast(region) {
     const url = util.getRegionUrl(region);
-    const response = await api.getJapanMetrogicalAgency(url.tenki);
-    const forecast = await util.parseJPM(response.data);
+    const response = await api.getJapanMetrogicalAgency(url.jpm);
+    this.setState({todaysForecast: response.data})
   }
 
   async getWeatherForecast(region) {

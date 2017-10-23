@@ -33,19 +33,25 @@ const WeatherTable = (props) => {
     }
 
     return (
-        <table className="table">
-            <thead>
-                <tr>
-                    <th>日時</th>
-                    <th>天気</th>
-                    <th>降水確率</th>
-                    <th>ステータス</th>
-                </tr>
-            </thead>
-            <tbody>
-                {tableBody}
-            </tbody>
-        </table>
+        <div className="box">
+            <div className="media-content">
+                <div className="content">
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>日時</th>
+                                <th>天気</th>
+                                <th>降水確率</th>
+                                <th>ステータス</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {tableBody}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     )
 }
 
