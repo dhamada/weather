@@ -23,7 +23,7 @@ const WeatherTable = (props) => {
                             <span
                                 className={element.status === '中止'
                                 ? 'tag is-danger is-medium'
-                                : 'tag is-primary is-medium'}>
+                                : 'tag is-info is-medium'}>
                                 {element.status}
                             </span>
                         </td>
